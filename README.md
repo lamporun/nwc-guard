@@ -14,6 +14,8 @@ agent ──NWC──▶ nwc-guard ──NWC──▶ your wallet (Alby Hub, Min
 
 > Early software, built with the same care as the money it guards. Start with small limits.
 
+**Hosted beta coming soon.** You won't need a server to keep online: your agent gets a guarded connection and you approve payments from Telegram. [Join the waitlist on @LampoGuard_bot](https://t.me/LampoGuard_bot?start=beta) · [lampo.run/guard.html](https://lampo.run/guard.html)
+
 ## What it checks
 
 For every `pay_invoice`, in order:
