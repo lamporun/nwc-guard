@@ -29,7 +29,7 @@ For every `pay_invoice`, in order:
    - `ask`: new payees need your approval;
    - `allowlist`: unknown payees are refused;
    - `any`: payees are not checked.
-7. **Approval.** Payments to a new payee (in `ask` mode), or above `approveAbove` sats, wait for your ✅ or ❌. You have two minutes, after which the answer is no. "✅ Always" also adds the payee to the allowlist.
+7. **Approval.** Payments to a new payee (in `ask` mode), or above `approveAbove` sats, wait for your ✅ or ❌. You have 55 seconds, after which the answer is no: most NWC clients stop waiting for a reply after 60, so an approval can never pay after the agent has given up. "✅ Always" also adds the payee to the allowlist.
 
 Everything else an agent can call is narrowed too:
 - `get_balance` returns what the agent may still spend today, capped by the real balance;
@@ -53,7 +53,7 @@ npx github:lamporun/nwc-guard allow openclaw 03abc... "my shop"
 export NWC_UPSTREAM_URL="nostr+walletconnect://..."      # your wallet's own connection
 export NWC_GUARD_TELEGRAM_TOKEN="123456:ABC..."          # optional: a bot only nwc-guard uses
 export NWC_GUARD_TELEGRAM_CHAT="your chat id"
-npx github:lamporun/nwc-guard start      # --approval-timeout 300 to wait longer than 2 minutes
+npx github:lamporun/nwc-guard start      # --approval-timeout <seconds> to change the default of 55
 ```
 
 Give the agent the string from step 1 instead of your wallet's. To get a Telegram bot, ask [@BotFather](https://t.me/BotFather) for one, send it a message, and read your chat id from `https://api.telegram.org/bot<token>/getUpdates`. Without Telegram, approvals are asked in the terminal the guard runs in; without a terminal, anything needing approval is refused.

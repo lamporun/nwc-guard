@@ -47,7 +47,8 @@ Approvals (for start):
 Options:
   --data-dir <dir>                     config, state and audit log (default ~/.nwc-guard)
   --relay <url>                        relay for new connections (default ${DEFAULT_RELAY})
-  --approval-timeout <seconds>         how long to wait for your answer (default 120)
+  --approval-timeout <seconds>         how long to wait for your answer (default 55;
+                                       most NWC clients give up after 60)
   -h, --help, -v, --version
 
 Rules live per connection in <data-dir>/config.json. Defaults: 1,000 sats per
@@ -213,7 +214,7 @@ Then start the guard with your real wallet:
 		console.log(`note: the wallet did not answer get_info (${err instanceof Error ? err.message : err}); continuing`);
 	}
 
-	const timeoutRaw = args["approval-timeout"] ?? "120";
+	const timeoutRaw = args["approval-timeout"] ?? "55";
 	if (!/^\d+$/.test(timeoutRaw) || Number(timeoutRaw) < 10 || Number(timeoutRaw) > 3600) {
 		fail("--approval-timeout must be between 10 and 3600 seconds");
 	}

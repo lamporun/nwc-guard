@@ -38,7 +38,7 @@ export const denyAll = { ask: async () => /** @type {ApprovalAnswer} */ ("deny")
 export class TerminalApprover {
 	/** @param {{ timeoutMs?: number, input?: NodeJS.ReadableStream, output?: NodeJS.WritableStream }} [options] */
 	constructor(options = {}) {
-		this.timeoutMs = options.timeoutMs ?? 120_000;
+		this.timeoutMs = options.timeoutMs ?? 55_000;
 		this.input = options.input ?? process.stdin;
 		this.output = options.output ?? process.stdout;
 		/** @type {Promise<unknown>} */
@@ -93,7 +93,7 @@ export class TelegramApprover {
 	constructor(options) {
 		this.token = options.token;
 		this.chatId = String(options.chatId);
-		this.timeoutMs = options.timeoutMs ?? 120_000;
+		this.timeoutMs = options.timeoutMs ?? 55_000;
 		this.apiBase = options.apiBase ?? "https://api.telegram.org";
 		this.fetchFn = options.fetchFn ?? fetch;
 		this.onCommand = options.onCommand ?? (() => "");
