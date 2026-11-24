@@ -1,0 +1,50 @@
+{
+	"name": "nwc-guard",
+	"version": "0.1.0",
+	"description": "A spending firewall between AI agents and your Lightning wallet: an NWC proxy with payee rules, rate limits, budgets and approval on your phone.",
+	"type": "module",
+	"license": "MIT",
+	"bin": {
+		"nwc-guard": "bin/nwc-guard.js"
+	},
+	"files": [
+		"bin",
+		"src",
+		"README.md",
+		"LICENSE"
+	],
+	"engines": {
+		"node": ">=22"
+	},
+	"scripts": {
+		"test": "node --test 'test/**/*.test.js'",
+		"check": "tsc -p jsconfig.json"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/lamporun/nwc-guard.git"
+	},
+	"keywords": [
+		"nwc",
+		"nostr-wallet-connect",
+		"lightning",
+		"bitcoin",
+		"ai-agents",
+		"security",
+		"firewall",
+		"prompt-injection"
+	],
+	"dependencies": {
+		"@getalby/sdk": "9.0.0",
+		"@noble/curves": "2.0.1",
+		"@noble/hashes": "2.0.1",
+		"@scure/base": "1.1.1",
+		"light-bolt11-decoder": "3.2.0",
+		"nostr-tools": "2.26.1"
+	},
+	"devDependencies": {
+		"@types/node": "26.6.6",
+		"bolt11": "1.4.2",
+		"typescript": "7.0.2"
+	}
+}
