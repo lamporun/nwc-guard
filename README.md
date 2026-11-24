@@ -51,7 +51,7 @@ npx github:lamporun/nwc-guard allow openclaw 03abc... "my shop"
 export NWC_UPSTREAM_URL="nostr+walletconnect://..."      # your wallet's own connection
 export NWC_GUARD_TELEGRAM_TOKEN="123456:ABC..."          # optional: a bot only nwc-guard uses
 export NWC_GUARD_TELEGRAM_CHAT="your chat id"
-npx github:lamporun/nwc-guard start
+npx github:lamporun/nwc-guard start      # --approval-timeout 300 to wait longer than 2 minutes
 ```
 
 Give the agent the string from step 1 instead of your wallet's. To get a Telegram bot, ask [@BotFather](https://t.me/BotFather) for one, send it a message, and read your chat id from `https://api.telegram.org/bot<token>/getUpdates`. Without Telegram, approvals are asked in the terminal the guard runs in; without a terminal, anything needing approval is refused.
@@ -76,6 +76,16 @@ Each connection has its rules in `~/.nwc-guard/config.json`, with these defaults
 Use one connection per agent, so each has its own limits and its own audit trail, and revoking one doesn't touch the others. Restart the guard after editing the file.
 
 **A note on payees.** Most nodes sign every invoice with the same key, so trusting a payee works across its invoices. Some wallets sign each invoice with a fresh key for privacy, Wavelength's receive invoices among them. For those payees an allowlist entry matches only that one invoice. Rely on approval and the amount and budget limits instead. The approval message shows the node the payment is routed through, for example "Lightning Labs Loop (Wavelength receives)", to help you decide.
+
+## Tested on mainnet
+
+On 2026-11-24 the guard ran between [l402-bridge](https://github.com/lamporun/l402-bridge) and a [Minibits](https://www.minibits.cash/) wallet, buying inference from https://lampo.run with real sats:
+
+| Step | Result |
+|---|---|
+| The bridge asks for a DeepSeek V4 Flash bundle (1,000 sats, new payee) | the guard asked on Telegram, the owner pressed ✅, Minibits paid, and the answer arrived in 23.6 s including the approval |
+| A second request | the bundle was reused, nothing paid, 0.6 s |
+| A Kimi K3 bundle (3,000 sats), allowed by the bridge's own limit | refused by the guard (`QUOTA_EXCEEDED`: above 1,000 per payment) without asking, nothing paid |
 
 ## With l402-bridge
 

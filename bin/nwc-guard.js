@@ -47,6 +47,7 @@ Approvals (for start):
 Options:
   --data-dir <dir>                     config, state and audit log (default ~/.nwc-guard)
   --relay <url>                        relay for new connections (default ${DEFAULT_RELAY})
+  --approval-timeout <seconds>         how long to wait for your answer (default 120)
   -h, --help, -v, --version
 
 Rules live per connection in <data-dir>/config.json. Defaults: 1,000 sats per
@@ -74,6 +75,7 @@ async function main() {
 				"data-dir": { type: "string" },
 				relay: { type: "string", multiple: true },
 				"upstream-file": { type: "string" },
+				"approval-timeout": { type: "string" },
 				help: { type: "boolean", short: "h" },
 				version: { type: "boolean", short: "v" },
 			},
@@ -211,6 +213,11 @@ Then start the guard with your real wallet:
 		console.log(`note: the wallet did not answer get_info (${err instanceof Error ? err.message : err}); continuing`);
 	}
 
+	const timeoutRaw = args["approval-timeout"] ?? "120";
+	if (!/^\d+$/.test(timeoutRaw) || Number(timeoutRaw) < 10 || Number(timeoutRaw) > 3600) {
+		fail("--approval-timeout must be between 10 and 3600 seconds");
+	}
+	const approvalTimeoutMs = Number(timeoutRaw) * 1000;
 	const stopFile = join(dataDir, "STOP");
 	let pausedByChat = false;
 	const isPaused = () => pausedByChat || existsSync(stopFile);
@@ -226,6 +233,7 @@ Then start the guard with your real wallet:
 		const telegram = new TelegramApprover({
 			token,
 			chatId: chat,
+			timeoutMs: approvalTimeoutMs,
 			onCommand: (command) => {
 				if (command === "/stop") {
 					pausedByChat = true;
@@ -250,7 +258,7 @@ Then start the guard with your real wallet:
 		approver = telegram;
 		approvals = "Telegram (/stop, /resume, /status)";
 	} else if (process.stdin.isTTY) {
-		approver = new TerminalApprover();
+		approver = new TerminalApprover({ timeoutMs: approvalTimeoutMs });
 		approvals = "this terminal";
 	}
 
